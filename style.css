@@ -1,0 +1,179 @@
+/* --- Reseteo Básico y Tema Oscuro --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Exo 2', sans-serif;
+    color: #f0f8ff;
+    /* El fondo base del tema */
+    background-color: #0a0f2b;
+}
+
+body {
+    position: relative;
+    overflow: hidden; /* Oculta el desbordamiento del feed */
+    height: 100vh;
+    width: 100vw;
+    
+    /* Animación de fondo de "flujo de hielo" */
+    background: linear-gradient(-45deg, #0a0f2b, #001a33, #0a0f2b, #003366);
+    background-size: 400% 400%;
+    animation: ice-flow 15s ease infinite;
+}
+
+/* Keyframes para el fondo */
+@keyframes ice-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Estructura del Feed (Scroll Snap) --- */
+#shorts-feed {
+    height: 100vh;
+    width: 100%;
+    overflow-y: scroll;
+    /* Activa el scroll snap vertical */
+    scroll-snap-type: y mandatory;
+    /* Oculta la barra de scroll (estilo) */
+    -ms-overflow-style: none; /* IE y Edge */
+    scrollbar-width: none; /* Firefox */
+}
+#shorts-feed::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+}
+
+.short-video {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    /* Define el punto de anclaje del snap */
+    scroll-snap-align: start;
+    
+    /* Centra el video */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Fondo de "partículas" (sutil) */
+    background-image: radial-gradient(#00ffff 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: 0 0;
+    animation: sparkle-move 60s linear infinite;
+}
+
+/* Animación sutil de las partículas de fondo */
+@keyframes sparkle-move {
+    from { background-position: 0 0; }
+    to { background-position: -1000px -1000px; }
+}
+
+/* Estilo del Iframe del video */
+.short-video iframe {
+    width: 320px; /* Ancho típico de short */
+    height: 568px; /* Aspecto 9:16 */
+    max-width: 90vw;
+    max-height: 90vh;
+    border: 2px solid #0077ff;
+    border-radius: 16px;
+    box-shadow: 0 0 20px #0077ff;
+}
+
+/* --- Superposición de UI (Info y Botones) --- */
+.video-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite hacer clic "a través" de la superposición */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.video-info {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+.video-info h3 {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+.video-info p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    max-width: 70%;
+}
+
+.action-buttons {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- Estilo "Teclado de Hielo" (El núcleo) --- */
+.ice-key {
+    pointer-events: all; /* Los botones SÍ deben ser clickeables */
+    background: rgba(0, 200, 255, 0.15);
+    border: 2px solid #00ffff;
+    color: #f0f8ff;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    
+    /* Brillo Neón */
+    text-shadow: 0 0 8px #00ffff;
+    box-shadow: 0 0 10px #00ffff, inset 0 0 8px rgba(0, 255, 255, 0.3);
+    
+    /* Efecto 3D "Tecla" */
+    transform: perspective(800px) rotateX(15deg);
+    
+    /* Transición suave para 60 FPS */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+}
+
+.ice-key span {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+/* Interacción Hover: La tecla se eleva y brilla más */
+.ice-key:hover {
+    background: rgba(0, 255, 255, 0.25);
+    transform: perspective(800px) rotateX(5deg) scale(1.05);
+    box-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Interacción Active: La tecla se "presiona" */
+.ice-key:active {
+    transform: perspective(800px) rotateX(0deg) scale(0.95);
+    box-shadow: 0 0 5px #00ffff, inset 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* --- Detalle Creativo: Pulso de Neón --- */
+.short-video.is-active .ice-key {
+    /* Aplica la animación de pulso solo a los botones del video activo */
+    animation: ice-pulse 2s infinite ease-in-out;
+}
+
+@keyframes ice-pulse {
+    0%, 100% {
+        box-shadow: 0 0 10px #00ffff, inset 0 0 8px rgba(0, 255, 255, 0.3);
+        transform: perspective(800px) rotateX(15deg) scale(1.0);
+    }
+    50% {
+        box-shadow: 0 0 25px #00ffff, 0 0 40px #00ffff, inset 0 0 12px rgba(255, 255, 255, 0.5);
+        transform: perspective(800px) rotateX(15deg) scale(1.03);
+    }
+}
